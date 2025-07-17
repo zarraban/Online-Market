@@ -27,27 +27,15 @@ public class User {
     private Long id;
 
     @Column(name = "first_name")
-    @NotNull
-    @Size(min = 2, max = 15)
-    @NotBlank
     private String firstName;
 
     @Column(name = "last_name")
-    @NotNull
-    @Size(min = 5, max = 15)
-    @NotBlank
     private String lastName;
 
     @Column(name = "phone")
-    @NotNull
-    @NotBlank
     private String phone;
 
-
     @Column(name = "email")
-    @NotNull
-    @NotBlank
-    @Email
     private String email;
 
 
@@ -55,6 +43,9 @@ public class User {
     @NotNull
     @NotBlank
     private String country;
+
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "profle_photo")
     @NotNull
