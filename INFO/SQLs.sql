@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS products(
     cost INT NOT NULL,
     photo_ref TEXT NOT NULL UNIQUE,
     quantity INT NOT NULL,
-    category TEXT NOT NULL
+    category TEXT NOT NULL,
+    discount double precision
 );
 
 

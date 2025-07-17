@@ -43,6 +43,10 @@ public class Product {
     private Integer quantity;
 
     @NotNull
+    @Column(name = "discount")
+    private Double discount;
+
+    @NotNull
     @Size(min = 2)
     @Column(name = "category")
     private String category;
