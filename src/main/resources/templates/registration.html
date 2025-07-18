@@ -15,7 +15,7 @@
     <div class="container py-2">
         <div class="row justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-6">
-                <form class="bg-white p-4 rounded shadow-lg mt-0" th:action="@{/registration}" th:object="user" method="post">
+                <form class="bg-white p-4 rounded shadow-lg mt-0" th:action="@{/registration}" th:object="${user}" method="post">
                     <h2 class="text-center mb-4 fs-7">Registration form</h2>
 
                     <div th:if="${param.error}" class="alert alert-danger mb-3">
@@ -27,33 +27,33 @@
                         <div class="row">
                             <div class="col">
                                 <label class="orm-label fs-5" for="firstName">First Name</label>
-                                <input id="firstName" type="text" class="form-control" placeholder="First name">
+                                <input th:field="*{firstName}" id="firstName" type="text" class="form-control" placeholder="First name">
                             </div>
                             <div class="col">
-                                <label class="orm-label fs-5" for="lastName">First Name</label>
-                                <input id="lastName" type="text" class="form-control" placeholder="Last name">
+                                <label class="orm-label fs-5" for="lastName">Last Name</label>
+                                <input th:field="*{lastName}" id="lastName" type="text" class="form-control" placeholder="Last name">
                             </div>
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="phone" class="form-label fs-5">Phone</label>
-                        <input type="text" name="phone" class="form-control form-control-sm fs-6" id="phone" placeholder="Your phone number..">
+                        <input th:field="*{phone}" type="text" name="phone" class="form-control form-control-sm fs-6" id="phone" placeholder="Your phone number..">
                     </div>
 
                     <div class="mb-3">
                         <label for="email" class="form-label fs-5">Email</label>
-                        <input type="email" name="username" class="form-control form-control-sm fs-6" id="email" placeholder="email@example.com">
+                        <input th:field="*{email}" type="email" name="username" class="form-control form-control-sm fs-6" id="email" placeholder="email@example.com">
                     </div>
 
                     <div class="mb-3">
                         <label for="password" class="form-label fs-5">Password</label>
-                        <input type="password" name="password" class="form-control form-control-sm fs-6" id="password" placeholder="Password">
+                        <input th:field="*{password}" ype="password" name="password" class="form-control form-control-sm fs-6" id="password" placeholder="Password">
                     </div>
 
                     <div class="mb-3">
                         <label for="country" class="form-label fs-5">Country</label>
-                        <input class="form-control" list="countryOptions" id="country" placeholder="Type to search...">
+                        <input th:field="*{country}" class="form-control" list="countryOptions" id="country" placeholder="Type to search...">
                         <datalist id="countryOptions">
                             <option value="United States">
                             <option value="Canada">
@@ -83,12 +83,12 @@
                         <label for="optionsRole" class="form-label fs-5">Register as:</label>
                         <div id="optionsRole">
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-                            <label class="form-check-label" for="inlineRadio1">Customer</label>
+                            <input th:field="*{role}" th:value="CUSTOMER" class="form-check-input" type="radio" name="inlineRadioOptions" id="customerRole">
+                            <label class="form-check-label" for="customerRole">Customer</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                            <label class="form-check-label" for="inlineRadio2">Seller</label>
+                            <input th:field="*{role}" th:value="SELLER" class="form-check-input" type="radio" name="inlineRadioOptions" id="sellerRole">
+                            <label  class="form-check-label" for="sellerRole">Seller</label>
                         </div>
                         </div>
                     </div>
