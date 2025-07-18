@@ -46,4 +46,8 @@ public class UserDto {
     @Size(min = 5, max = 15)
     private String password;
 
+    @NotBlank
+    @NotNull
+    private String role;
+
 }
