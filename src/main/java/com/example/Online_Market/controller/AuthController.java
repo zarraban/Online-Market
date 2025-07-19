@@ -1,0 +1,56 @@
+package com.example.Online_Market.controller;
+
+
+import com.example.Online_Market.dto.UserDto;
+import com.example.Online_Market.entity.user.User;
+import com.example.Online_Market.service.user.UserService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.Optional;
+
+@Controller
+public class AuthController {
+    private final UserService userService;
+    public AuthController(
+            @Qualifier("userService")UserService userService
+            ){
+        this.userService = userService;
+    }
+    @GetMapping("/registration")
+    public String registrationPage(){
+        return "registration";
+    }
+
+    @GetMapping("/login")
+    public String loginPage(){
+        return "login";
+    }
+
+    @GetMapping("/main")
+    public String mainPage(){
+        return "main";
+    }
+
+    @PostMapping("/registration/save/user")
+    public String saveUser(@Valid @ModelAttribute("user") UserDto userDto, BindingResult bindingResult){
+        userService.save(userDto);
+        Optional<User> userOptional = userService.getByEmail(userDto.getEmail());
+        if(bindingResult.hasErrors()){
+            return "redirect:/registration?error";
+        }
+        if(userOptional.isPresent()){
+            return "catalog";
+        }else {
+            return "redirect:/registration?errorUser";
+        }
+
+    }
+
+
+}
