@@ -45,7 +45,7 @@ public class AuthController {
             return "redirect:/registration?error";
         }
         if(userOptional.isPresent()){
-            return "catalog";
+            return "login";
         }else {
             return "redirect:/registration?errorUser";
         }
