@@ -39,11 +39,21 @@ public class AuthController {
 
     @PostMapping("/registration/save/user")
     public String saveUser(@Valid @ModelAttribute("user") UserDto userDto, BindingResult bindingResult){
-        userService.save(userDto);
-        Optional<User> userOptional = userService.getByEmail(userDto.getEmail());
+
         if(bindingResult.hasErrors()){
             return "redirect:/registration?error";
         }
+
+        try {
+            userService.save(userDto);
+        }catch (Exception e){
+            return "redirect:/registration?errorSave";
+        }
+
+
+        Optional<User> userOptional = userService.getByEmail(userDto.getEmail());
+
+
         if(userOptional.isPresent()){
             return "login";
         }else {
