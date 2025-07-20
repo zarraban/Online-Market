@@ -6,6 +6,8 @@ import com.example.Online_Market.exception.FileException;
 import com.example.Online_Market.repository.role.RoleRepository;
 import com.example.Online_Market.repository.user.UserRepository;
 import com.example.Online_Market.service.BaseService;
+import javassist.NotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,8 +19,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service("userService")
+@Slf4j
 public class UserService implements BaseService<UserDto, User> {
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
@@ -37,27 +39,37 @@ public class UserService implements BaseService<UserDto, User> {
 
     @Override
     @Transactional
-    public User save(UserDto entity) {
-        Objects.requireNonNull(entity, "Parameter [entity] must not be null!");
-        
-        if(roleRepository.findRoleByName(entity.getRole())){
-            User user = new User();
-            user.setFirstName(entity.getFirstName());
-            user.setLastName(entity.getLastName());
-            user.setPhone(entity.getPhone());
-            user.setEmail(entity.getEmail());
-            user.setCountry(entity.getCountry());
-            user.setProfilePhoto("/userPhotos/standardUserPhoto.webp");
-            user.setPassword(passwordEncoder.encode(entity.getPassword()));
-            return userRepository.save(user);
+    public User save(UserDto entity) throws NotFoundException {
+        if(entity == null){
+            log.error("Given entity to save() was null");
+            throw new NullPointerException("User dto can't be null");
         }
-        return null;
+
+        if(!roleRepository.findRoleByName(entity.getRole())){
+
+            log.error("Role that was given by User doesn't exist. UserEmail={}", entity.getEmail());
+            throw new NotFoundException("Role was no found");
+        }
+        User user = new User();
+        user.setFirstName(entity.getFirstName());
+        user.setLastName(entity.getLastName());
+        user.setPhone(entity.getPhone());
+        user.setEmail(entity.getEmail());
+        user.setCountry(entity.getCountry());
+        user.setProfilePhoto("/userPhotos/standardUserPhoto.webp");
+        user.setPassword(passwordEncoder.encode(entity.getPassword()));
+        return userRepository.save(user);
+
+
     }
 
     @Override
     @Transactional
     public boolean deleteByEmail(String email) {
-        Objects.requireNonNull(email, "Parameter [email] must not be null!");
+        if(email == null){
+            log.error("Given email to deleteByEmail() was null");
+            throw new NullPointerException("Email can't be null");
+        }
         return userRepository.deleteByEmail(email);
     }
 
@@ -71,7 +83,10 @@ public class UserService implements BaseService<UserDto, User> {
     @Override
     @Transactional(readOnly = true)
     public Optional<User> getByEmail(String email) {
-        Objects.requireNonNull(email, "Parameter [email] must not be null!");
+        if(email == null){
+            log.error("Given email to getByEmail() was null");
+            throw new NullPointerException("Email can't be null");
+        }
         User user = userRepository.findByEmail(email);
         return Optional.of(user);
     }
@@ -79,19 +94,25 @@ public class UserService implements BaseService<UserDto, User> {
 
     @Transactional
     public boolean updateUserPhoto(String email, String photoPath){
-        Objects.requireNonNull(email, "Parameter [email] must not be null!");
-        Objects.requireNonNull(photoPath, "Parameter [photoPath] must not be null!");
+        if(email == null){
+            log.error("Given email to updateUserPhoto() was null");
+            throw new NullPointerException("Email can't be null");
+        }
+        if(photoPath == null){
+            log.error("Given photoPath to updateUserPhoto() was null");
+            throw new NullPointerException("PhotoPath can't be null");
+        }
 
         File file = new File(photoPath);
         if(!file.exists() || !file.isFile()){
 
-            //TODO add logs
+            log.error("File with filepath = [{}], doesn't exist or has invalid format", file.getPath());
             throw new FileException("FIle doesn't exist or not valid!");
         }
 
         User user = userRepository.findByEmail(email);
         if(user==null){
-            //TODO add logs
+            log.error("User with email = [{}] was not found!", email);
             throw new FileException("User with email= "+ email +" was not found!");
         }
 
@@ -100,7 +121,7 @@ public class UserService implements BaseService<UserDto, User> {
             userRepository.save(user);
             return true;
         }catch (Exception e){
-            //TODO add logger with this message
+            log.error("Error occurred while saving user(Email = [{}]) with photo=[{}]",email,photoPath);
             return false;
         }
 
