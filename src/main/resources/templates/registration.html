@@ -15,11 +15,14 @@
     <div class="container py-2">
         <div class="row justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-6">
-                <form class="bg-white p-4 rounded shadow-lg mt-0" th:action="@{/registration}" th:object="${user}" method="post">
+                <form class="bg-white p-4 rounded shadow-lg mt-0" th:action="@{/registration/save/user}" th:object="${user}" method="post">
                     <h2 class="text-center mb-4 fs-7">Registration form</h2>
 
                     <div th:if="${param.error}" class="alert alert-danger mb-3">
                         Invalid filled fields
+                    </div>
+                    <div th:a="${param.errorUser}" class="alert alert-danger mb-3">
+                        Unable to add user
                     </div>
 
 
