@@ -18,11 +18,16 @@
                 <form class="bg-white p-4 rounded shadow-lg mt-0" th:action="@{/registration/save/user}" th:object="${user}" method="post">
                     <h2 class="text-center mb-4 fs-7">Registration form</h2>
 
-                    <div th:if="${param.error}" class="alert alert-danger mb-3">
-                        Invalid filled fields
-                    </div>
-                    <div th:a="${param.errorUser}" class="alert alert-danger mb-3">
-                        Unable to add user
+                    <div th:switch="${param.error}">
+                        <div th:case="true" class="alert alert-danger mb-3">
+                            Invalid filled fields
+                        </div>
+                        <div th:case="${param.errorUser}" class="alert alert-danger mb-3">
+                            Unable to add user
+                        </div>
+                        <div th:case="${param.errorSave}" class="alert alert-danger mb-3">
+                            Error with saving user occurred
+                        </div>
                     </div>
 
 
