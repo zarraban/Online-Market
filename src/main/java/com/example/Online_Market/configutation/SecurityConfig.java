@@ -24,8 +24,24 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests((requests) -> requests.anyRequest().authenticated());
-        http.formLogin(withDefaults());
+
+        //FOR TESTING
+//        http.authorizeHttpRequests((requests) -> requests.anyRequest().authenticated());
+//        http.authorizeHttpRequests((requests) -> requests.anyRequest().permitAll());
+        http.authorizeHttpRequests((request)->
+                request.requestMatchers(
+                        "/registration",
+                        "/login",
+                        "/error",
+                        "/carouselPhotos/**",
+                        "/footerPhotos/**",
+                        "/logo/**",
+                        "/siteIcon/**",
+                        "/userPhotos/**",
+                        "/css/**",
+                        "/js/**").permitAll());
+        http.formLogin((login)->
+                login.loginPage("/login"));
         http.httpBasic(withDefaults());
         return http.build();
     }
