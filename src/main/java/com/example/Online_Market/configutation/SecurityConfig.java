@@ -33,6 +33,8 @@ public class SecurityConfig {
                         "/registration",
                         "/login",
                         "/error",
+                        "/main",
+                        "/registration/save/user",
                         "/carouselPhotos/**",
                         "/footerPhotos/**",
                         "/logo/**",
@@ -41,7 +43,8 @@ public class SecurityConfig {
                         "/css/**",
                         "/js/**").permitAll());
         http.formLogin((login)->
-                login.loginPage("/login"));
+                login.loginPage("/login")
+                        .successForwardUrl("/main"));
         http.httpBasic(withDefaults());
         return http.build();
     }
