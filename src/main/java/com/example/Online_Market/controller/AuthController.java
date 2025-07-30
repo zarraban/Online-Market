@@ -35,16 +35,18 @@ public class AuthController {
     }
 
     @PostMapping("/registration/save/user")
-    public String saveUser(@Valid @ModelAttribute("userDto") UserDto userDto, BindingResult bindingResult){
+    public String saveUser(@Valid @ModelAttribute("user") UserDto userDto, BindingResult bindingResult, Model model){
 
         if(bindingResult.hasErrors()){
-            return "redirect:/registration?error";
+            model.addAttribute("errorValidation", "Fill fields correctly");
+            return "registration";
         }
 
         try {
             userService.save(userDto);
         }catch (Exception e){
-            return "redirect:/registration?errorSave";
+            model.addAttribute("errorSave","Error while saving user");
+            return "registration";
         }
 
 
@@ -54,7 +56,8 @@ public class AuthController {
         if(userOptional.isPresent()){
             return "login";
         }else {
-            return "redirect:/registration?errorUser";
+            model.addAttribute("errorUser","User was not saved. Try again!");
+            return "registration";
         }
 
     }
