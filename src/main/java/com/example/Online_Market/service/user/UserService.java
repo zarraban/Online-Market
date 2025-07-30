@@ -1,6 +1,7 @@
 package com.example.Online_Market.service.user;
 
 import com.example.Online_Market.dto.UserDto;
+import com.example.Online_Market.entity.role.Role;
 import com.example.Online_Market.entity.user.User;
 import com.example.Online_Market.exception.FileException;
 import com.example.Online_Market.repository.role.RoleRepository;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service("userService")
 @Slf4j
@@ -44,11 +46,11 @@ public class UserService implements BaseService<UserDto, User> {
             throw new NullPointerException("User dto can't be null");
         }
 
-        if(!roleRepository.findRoleByName(entity.getRole())){
-
+        if(roleRepository.findByName(entity.getRole())==null){
             log.error("Role that was given by User doesn't exist. UserEmail={}", entity.getEmail());
-            throw new NotFoundException("Role was no found");
+            throw new NotFoundException("Role was not found");
         }
+
         User user = new User();
         user.setFirstName(entity.getFirstName());
         user.setLastName(entity.getLastName());
@@ -57,6 +59,15 @@ public class UserService implements BaseService<UserDto, User> {
         user.setCountry(entity.getCountry());
         user.setProfilePhoto("/userPhotos/standardUserPhoto.webp");
         user.setPassword(passwordEncoder.encode(entity.getPassword()));
+
+        Role role = roleRepository.findByName(entity.getRole());
+        if (role != null) {
+            user.setRoles(Set.of(role));
+        } else {
+            log.error("Role not found for name: {}", entity.getRole());
+            throw new NotFoundException("Role was not found");
+        }
+
         return userRepository.save(user);
 
 
@@ -124,5 +135,11 @@ public class UserService implements BaseService<UserDto, User> {
             return false;
         }
 
+    }
+
+    @Transactional(readOnly = true)
+    public int getUsersNumber(){
+        List<User> list =  userRepository.findAll();
+        return list.size();
     }
 }
