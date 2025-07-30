@@ -11,24 +11,16 @@
 </head>
 <body>
 
-<section layout:fragment="content" class="d-flex align-items-center justify-content-center min-vh-100 bg-light">
-    <div class="container py-2">
+<section layout:fragment="content" class="d-flex align-items-center justify-content-center bg-light py-5">
+    <div class="container py-4 mb-5">
         <div class="row justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-6">
                 <form class="bg-white p-4 rounded shadow-lg mt-0" th:action="@{/registration/save/user}" th:object="${user}" method="post">
                     <h2 class="text-center mb-4 fs-7">Registration form</h2>
 
-                    <div th:switch="${param.error}">
-                        <div th:case="true" class="alert alert-danger mb-3">
-                            Invalid filled fields
-                        </div>
-                        <div th:case="${param.errorUser}" class="alert alert-danger mb-3">
-                            Unable to add user
-                        </div>
-                        <div th:case="${param.errorSave}" class="alert alert-danger mb-3">
-                            Error with saving user occurred
-                        </div>
-                    </div>
+                    <div class="alert alert-danger" role="alert" th:if="${errorSave}" th:text="${errorSave}"></div>
+                    <div class="alert alert-danger" role="alert" th:if="${errorUser}" th:text="${errorUser}"></div>
+                    <div class="alert alert-danger" role="alert" th:if="${errorValidation}" th:text="${errorValidation}"></div>
 
 
                     <div class="mb-3">
@@ -56,7 +48,7 @@
 
                     <div class="mb-3">
                         <label for="password" class="form-label fs-5">Password</label>
-                        <input th:field="*{password}" type="password" name="password" class="form-control form-control-sm fs-6" id="password" placeholder="Password">
+                        <input th:field="*{password}" type="password" name="password" class="form-control form-control-sm fs-6" id="password" placeholder="Password size:[5-15]">
                     </div>
 
                     <div class="mb-3">
