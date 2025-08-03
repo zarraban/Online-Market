@@ -10,6 +10,7 @@ import com.example.Online_Market.service.BaseService;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.password.CompromisedPasswordChecker;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,15 +26,18 @@ public class UserService implements BaseService<UserDto, User> {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final CompromisedPasswordChecker passwordChecker;
 
     public UserService(
         @Qualifier("userRepository") UserRepository userRepository,
         PasswordEncoder passwordEncoder,
-        @Qualifier("roleRepository") RoleRepository roleRepository
+        @Qualifier("roleRepository") RoleRepository roleRepository,
+        CompromisedPasswordChecker passwordChecker
     ){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
+        this.passwordChecker = passwordChecker;
     }
 
 
@@ -50,6 +54,7 @@ public class UserService implements BaseService<UserDto, User> {
             log.error("Role that was given by User doesn't exist. UserEmail={}", entity.getEmail());
             throw new NotFoundException("Role was not found");
         }
+
 
         User user = new User();
         user.setFirstName(entity.getFirstName());
