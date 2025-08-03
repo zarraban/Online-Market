@@ -11,6 +11,7 @@ import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.password.CompromisedPasswordChecker;
+import org.springframework.security.authentication.password.CompromisedPasswordException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,6 +54,13 @@ public class UserService implements BaseService<UserDto, User> {
         if(roleRepository.findByName(entity.getRole())==null){
             log.error("Role that was given by User doesn't exist. UserEmail={}", entity.getEmail());
             throw new NotFoundException("Role was not found");
+        }
+
+        if(passwordChecker.check(entity.getPassword()).isCompromised()){
+            log.error(
+                    "Password that was provided by user [{}] was compromised, so registration is not successful",
+                    entity.getEmail());
+            throw new CompromisedPasswordException("Password should be changed(Was compromised)");
         }
 
 
