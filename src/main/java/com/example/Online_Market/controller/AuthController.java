@@ -6,6 +6,7 @@ import com.example.Online_Market.entity.user.User;
 import com.example.Online_Market.service.user.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.password.CompromisedPasswordException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -44,7 +45,12 @@ public class AuthController {
 
         try {
             userService.save(userDto);
-        }catch (Exception e){
+        }
+        catch (CompromisedPasswordException e) {
+            model.addAttribute("errorCompromisedPassword","Entered password is compromised! Try another!");
+            return "registration";
+        }
+        catch (Exception e){
             model.addAttribute("errorSave","Error while saving user");
             return "registration";
         }
