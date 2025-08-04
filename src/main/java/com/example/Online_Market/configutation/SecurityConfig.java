@@ -36,6 +36,7 @@ public class SecurityConfig {
                         "/login",
                         "/error",
                         "/main",
+                        "contact",
                         "/registration/save/user",
                         "/carouselPhotos/**",
                         "/footerPhotos/**",
