@@ -46,3 +46,10 @@ CREATE TABLE IF NOT EXISTS users_products(
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (product_id) REFERENCES products(id)
     );
+
+
+CREATE TABLE IF NOT EXISTS comments(
+    id BIGINGT GENERATED AS IDENTITY PRIMARY KEY,
+    text TEXT,
+    isAnonymous BOOLEAN
+    );
