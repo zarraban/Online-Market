@@ -54,6 +54,7 @@ public class SecurityConfig {
 
     @Bean
     public CompromisedPasswordChecker passwordChecker(){
+        //Realization of CompromisedPasswordChecker to check whether you password is not strong or good enough
         return new HaveIBeenPwnedRestApiPasswordChecker();
     }
 }
