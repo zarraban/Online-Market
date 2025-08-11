@@ -50,7 +50,8 @@ CREATE TABLE IF NOT EXISTS users_products(
 
 
 CREATE TABLE IF NOT EXISTS comments(
-    id BIGINGT GENERATED AS IDENTITY PRIMARY KEY,
+    comment_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     text TEXT,
-    isAnonymous BOOLEAN
+    isAnonymous BOOLEAN,
+    FOREIGN KEY (comment_id) REFERENCES users(user_comments)
     );
