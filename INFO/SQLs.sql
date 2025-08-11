@@ -28,7 +28,8 @@ CREATE TABLE IF NOT EXISTS users(
     email TEXT NOT NULL UNIQUE,
     country TEXT NOT NULL,
     profle_photo TEXT NOT NULL,
-    password TEXT NOT NULL
+    password TEXT NOT NULL,
+    user_comments BIGINT UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS users_roles(
