@@ -1,5 +1,6 @@
 package com.example.Online_Market.entity.user;
 
+import com.example.Online_Market.entity.comment.Comment;
 import com.example.Online_Market.entity.product.Product;
 import com.example.Online_Market.entity.role.Role;
 import jakarta.persistence.*;
@@ -7,6 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -58,4 +60,9 @@ public class User {
     joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
     inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"))
     private Set<Product> products;
+
+
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_comments")
+    private List<Comment> comments;
 }
