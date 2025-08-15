@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 public class CommentService {
     private final UserRepository userRepository;
-    private final  CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
 
     public CommentService(
         @Qualifier("userRepository") UserRepository userRepository,
@@ -27,7 +27,7 @@ public class CommentService {
         this.userRepository = userRepository;
     }
 
-    public User addCommentToUser(CommentDto commentDto) throws NullPointerException{
+    public boolean addCommentToUser(CommentDto commentDto) throws NullPointerException{
         if(commentDto == null){
             log.error("CommentDto is null!");
             throw new NullPointerException("CommentDto is null!");
@@ -49,7 +49,12 @@ public class CommentService {
 
         user.setComments(userComments);
 
-        return user;
+        if(commentRepository.findAll().contains(newComment)){
+            return true;
+        }
+        else {
+            return false;
+        }
 
     }
 }
