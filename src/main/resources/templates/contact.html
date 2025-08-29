@@ -16,7 +16,7 @@
     <div class="container py-4 mb-5">
         <div class="row justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-6">
-                <form class="bg-white p-4 rounded shadow-lg mt-0" th:action="@{/contact/send/comment}" th:object="comment" method="post">
+                <form class="bg-white p-4 rounded shadow-lg mt-0" th:action="@{/contact/send/comment}" th:object="${commentDto}" method="post">
                     <h2 class="text-center mb-4 fs-7">Comment:</h2>
 
                     <div class="alert alert-danger" role="alert" th:if="${errorValidation}" th:text="${errorValidation}"></div>
