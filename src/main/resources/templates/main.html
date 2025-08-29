@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layoutLogged.html}">
+      layout:decorate="~{layouts/layout.html}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -45,6 +45,18 @@
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Next</span>
     </button>
+  </div>
+
+  <div class="jumbotron">
+    <div class = "text-center">
+      <h1 class="display-4 fw-bold" th:text="| ${usersCount} registered in Online-Market!|"></h1>
+      <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+      <hr class="my-4">
+      <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+      <p class="lead">
+        <a class="btn btn-primary btn-lg" href="#" role="button">Go shopping</a>
+      </p>
+  </div>
   </div>
 </section>
 </body>
