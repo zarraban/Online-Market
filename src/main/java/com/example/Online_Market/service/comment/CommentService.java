@@ -27,34 +27,30 @@ public class CommentService {
         this.userRepository = userRepository;
     }
 
-    public boolean addCommentToUser(CommentDto commentDto) throws NullPointerException{
+
+    public boolean addCommentToUser(User user, CommentDto commentDto){
         if(commentDto == null){
             log.error("CommentDto is null!");
             throw new NullPointerException("CommentDto is null!");
         }
-        User user = userRepository.findByEmail(commentDto.getEmail());
-
         if(user == null){
-            log.error("User[email={}] is null!", commentDto.getEmail());
+            log.error("User is null while adding comments!");
             throw new NullPointerException("User is null!");
         }
-        List<Comment> userComments = user.getComments();
 
         Comment newComment = new Comment(
-                commentDto.getText(),
-                commentDto.getIsAnonymous()
+          commentDto.getText(),
+          commentDto.getIsAnonymous()
         );
 
-        userComments.add(newComment);
+        List<Comment> userComments = user.getComments();
+
+        if (userComments != null){
+            userComments.add(newComment);
+        }
 
         user.setComments(userComments);
 
-        if(commentRepository.findAll().contains(newComment)){
-            return true;
-        }
-        else {
-            return false;
-        }
-
+        return commentRepository.findAll().contains(newComment);
     }
 }
