@@ -28,7 +28,7 @@ public class CommentService {
     }
 
 
-    public boolean addCommentToUser(User user, CommentDto commentDto){
+    public User addCommentToUser(User user, CommentDto commentDto){
         if(commentDto == null){
             log.error("CommentDto is null!");
             throw new NullPointerException("CommentDto is null!");
@@ -51,6 +51,6 @@ public class CommentService {
 
         user.setComments(userComments);
 
-        return commentRepository.findAll().contains(newComment);
+        return userRepository.save(user);
     }
 }
