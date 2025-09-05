@@ -27,4 +27,13 @@ public class Comment {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private User user;
 
+
+
+    public Comment(
+        String text, Boolean isAnonymous
+    ){
+        this.text = text;
+        this.isAnonymous = isAnonymous;
+    }
+
 }
