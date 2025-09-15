@@ -16,8 +16,9 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
-@Profile("prod")
+
 public class SecurityConfig {
+
 
     @Bean
     public PasswordEncoder getPasswordEncoder(){
@@ -31,14 +32,13 @@ public class SecurityConfig {
 //        http.authorizeHttpRequests((requests) -> requests.anyRequest().authenticated());
 //        http.authorizeHttpRequests((requests) -> requests.anyRequest().permitAll());
         http
-                .redirectToHttps(withDefaults())
                 .authorizeHttpRequests((request)->
                 request.requestMatchers(
                         "/registration",
                         "/login",
+                        "/contact/send/comment",
                         "/error",
                         "/main",
-                        "contact",
                         "/registration/save/user",
                         "/carouselPhotos/**",
                         "/footerPhotos/**",
@@ -46,10 +46,22 @@ public class SecurityConfig {
                         "/siteIcon/**",
                         "/userPhotos/**",
                         "/css/**",
-                        "/js/**").permitAll());
+                        "/js/**")
+                        .permitAll()
+                        .requestMatchers(
+                                "/contact",
+                                "/logout")
+                        .authenticated());
         http.formLogin((login)->
                 login.loginPage("/login")
-                        .successForwardUrl("/main"));
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/contact",true)
+                        .permitAll())
+                .logout(logout->
+                        logout.logoutSuccessUrl("/login")
+                                .invalidateHttpSession(true)
+                                .logoutUrl("/logout")
+                                .deleteCookies("JSESSIONID"));
         http.httpBasic(withDefaults());
         return http.build();
     }
