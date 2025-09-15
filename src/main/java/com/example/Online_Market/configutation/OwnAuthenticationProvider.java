@@ -1,6 +1,7 @@
 package com.example.Online_Market.configutation;
 
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 
 @Component
+@Profile("prod")
 public class OwnAuthenticationProvider implements AuthenticationProvider {
 
     private PasswordEncoder passwordEncoder;
