@@ -49,7 +49,7 @@ public class User {
     @NotBlank
     private String profilePhoto;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
@@ -63,6 +63,5 @@ public class User {
 
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_comments")
     private List<Comment> comments;
 }
