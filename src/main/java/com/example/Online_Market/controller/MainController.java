@@ -3,6 +3,7 @@ package com.example.Online_Market.controller;
 
 import com.example.Online_Market.service.user.UserService;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,13 @@ public class MainController {
 
 
     @GetMapping("/main")
-    public String getMainPage(Model model){
+    public String getMainPage(Model model, Authentication authentication){
+        boolean isAuth = authentication!=null && authentication.isAuthenticated();
+        if(isAuth){
+            model.addAttribute("layout", "/layouts/layoutLogged.html");
+        }else {
+            model.addAttribute("layout", "/layouts/layout.html");
+        }
         int numberOfUsers = userService.getUsersNumber();
         model.addAttribute("usersCount", formatUsersNumber(numberOfUsers));
         return "main";
