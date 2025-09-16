@@ -8,6 +8,7 @@ import com.example.Online_Market.service.profanityfilter.ProfanityFilterService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,8 +31,14 @@ public class ContactFormController {
         this.commentService = commentService;
     }
     @GetMapping("/contact")
-    public String getContactFrom(Model model){
+    public String getContactFrom(Model model, Authentication authentication){
         model.addAttribute("commentDto", new CommentDto());
+        boolean isAuth = authentication!=null && authentication.isAuthenticated();
+        if(isAuth){
+            model.addAttribute("layout", "/layouts/layoutLogged.html");
+        }else {
+            model.addAttribute("layout", "/layouts/layout.html");
+        }
         return "contact";
     }
 
