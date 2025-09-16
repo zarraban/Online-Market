@@ -20,6 +20,5 @@ public class CommentDto {
     private String text;
 
     @NotNull
-    @NotBlank
     private Boolean isAnonymous;
 }
