@@ -5,26 +5,28 @@ import com.example.Online_Market.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Table(name = "comments")
 public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comment_id")
     private Long id;
 
     private String text;
 
+
+    @Column(name = "isanonymous")
     private Boolean isAnonymous;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne( fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
 
