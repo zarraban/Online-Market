@@ -7,6 +7,7 @@ import com.example.Online_Market.service.user.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.password.CompromisedPasswordException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,13 +26,25 @@ public class AuthController {
         this.userService = userService;
     }
     @GetMapping("/registration")
-    public String registrationPage(Model model){
+    public String registrationPage(Model model, Authentication authentication){
         model.addAttribute("user", new UserDto());
+        boolean isAuth = authentication!=null && authentication.isAuthenticated();
+        if(isAuth){
+            model.addAttribute("layout", "/layouts/layoutLogged.html");
+        }else {
+            model.addAttribute("layout", "/layouts/layout.html");
+        }
         return "registration";
     }
 
     @GetMapping("/login")
-    public String loginPage(){
+    public String loginPage(Model model, Authentication authentication){
+        boolean isAuth = authentication!=null && authentication.isAuthenticated();
+        if(isAuth){
+            model.addAttribute("layout", "/layouts/layoutLogged.html");
+        }else {
+            model.addAttribute("layout", "/layouts/layout.html");
+        }
         return "login";
     }
 
