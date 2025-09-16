@@ -36,7 +36,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         if(user == null){
             log.error("User with email= {} was not found during loadUserByUsername() in UserDetailsServiceImpl", username);
-            throw  new UsernameNotFoundException(String.format("User with email [%s] was not found", username));
+            throw new UsernameNotFoundException(String.format("User with email [%s] was not found", username));
         }
         
         List<GrantedAuthority> grantedAuthorities = user.getRoles()
