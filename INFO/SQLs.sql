@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS users(
     country TEXT NOT NULL,
     profle_photo TEXT NOT NULL,
     password TEXT NOT NULL,
-    user_comments BIGINT UNIQUE
+--     user_comments BIGINT UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS users_roles(
@@ -53,5 +53,6 @@ CREATE TABLE IF NOT EXISTS comments(
     comment_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     text TEXT,
     isAnonymous BOOLEAN,
-    FOREIGN KEY (comment_id) REFERENCES users(user_comments)
+    user_id BIGINT,
+    FOREIGN KEY (user_id) REFERENCES users(id)
     );
