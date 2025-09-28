@@ -1,11 +1,14 @@
 package com.example.Online_Market.service.profanityfilter;
 
 import com.example.Online_Market.dto.ProfanityResponseDto;
+import com.example.Online_Market.exception.BadWordException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Objects;
 
 @Service("profanityFilterService")
@@ -32,19 +35,19 @@ public class ProfanityFilterService {
                 .bodyToMono(ProfanityResponseDto.class);
     }
 
-    private boolean hasBadWords(Mono<ProfanityResponseDto> response){
-        if(response == null){
-            log.error("Response object in hasBadWords() is null! ");
-            throw new NullPointerException("Response object is null");
+    private void hasBadWords(Mono<ProfanityResponseDto> response){
+        ProfanityResponseDto responseDto = response.block();
+        if(responseDto==null){
+            throw new NullPointerException("Profanity API returned null!");
         }
-        if(Objects.requireNonNull(response.block()).hasProfanity){
-            return true;
-        } else {
-            return false;
+
+        if(responseDto.hasProfanity){
+            throw new BadWordException("Message contains bad words!");
         }
+
     }
 
-    public boolean hasBadWords(String textTOCheck){
-        return hasBadWords(profanityResponse(textTOCheck));
+    public void hasBadWords(String textTOCheck){
+        hasBadWords(profanityResponse(textTOCheck));
     }
 }
