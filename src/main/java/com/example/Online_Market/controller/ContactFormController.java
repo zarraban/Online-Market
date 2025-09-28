@@ -3,6 +3,7 @@ package com.example.Online_Market.controller;
 
 import com.example.Online_Market.dto.CommentDto;
 import com.example.Online_Market.entity.user.User;
+import com.example.Online_Market.exception.BadWordException;
 import com.example.Online_Market.service.comment.CommentService;
 import com.example.Online_Market.service.profanityfilter.ProfanityFilterService;
 import jakarta.validation.Valid;
@@ -35,30 +36,43 @@ public class ContactFormController {
         model.addAttribute("commentDto", new CommentDto());
         boolean isAuth = authentication!=null && authentication.isAuthenticated();
         if(isAuth){
-            model.addAttribute("layout", "/layouts/layoutLogged.html");
+            model.addAttribute("layout", "layouts/layoutLogged");
         }else {
-            model.addAttribute("layout", "/layouts/layout.html");
+            model.addAttribute("layout", "layouts/layout");
         }
         return "contact";
     }
 
     @PostMapping("/contact/send/comment")
-    public String sendComment(@Valid @ModelAttribute("comment") CommentDto comment,
+    public String sendComment(@Valid @ModelAttribute("commentDto") CommentDto comment,
                               Model model,
                               BindingResult bindingResult,
-                              @AuthenticationPrincipal User user){
+                              @AuthenticationPrincipal User user,
+                              Authentication authentication){
+        boolean isAuth = authentication!=null && authentication.isAuthenticated();
+        if(isAuth){
+            model.addAttribute("layout", "/layouts/layoutLogged.html");
+        }else {
+            model.addAttribute("layout", "/layouts/layout.html");
+        }
+
         if(bindingResult.hasErrors()){
             model.addAttribute("errorValidation", "Fill fields correctly!");
         }
-        if(filterService.hasBadWords(comment.getText())){
+        try {
+            filterService.hasBadWords(comment.getText());
+
+        }catch (BadWordException e){
             model.addAttribute("errorBadWords",
                     "Your message contains bad words! Try again without them!");
+            return "contact";
         }
-
         try{
             commentService.addCommentToUser(user,comment);
         }catch (Exception e){
             log.error("Exception occurred during saving comment: {}", e.getMessage());
+            model.addAttribute("errorSuccessSave", "Saving was not successful");
+            return "contact";
         }
 
 
